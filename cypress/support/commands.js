@@ -23,3 +23,27 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', (username, password) => {
+    cy.session([username, password], () => {
+        cy.visit("/login")
+        cy.get("#login-form-email").type(username)
+        cy.get("#login-form-password").type(password)
+        cy.intercept('POST', '/site/login').as('postLogin')
+        cy.get('button[name="login-button"]').click()
+        cy.wait('@postLogin')
+    },
+        {
+            cacheAcrossSpecs: true
+        }
+    )
+
+})
+
+Cypress.Commands.add('forgotPassEnterCreds', (username) => {
+
+    cy.url().should('contain', '/forgot-password')
+    cy.get("#passwordresetrequestform-email").type(username)
+    cy.get('.pull-left > .btn').click() 
+
+})
