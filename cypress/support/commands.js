@@ -47,3 +47,12 @@ Cypress.Commands.add('forgotPassEnterCreds', (username) => {
     cy.get('.pull-left > .btn').click() 
 
 })
+
+Cypress.Commands.add('dropdownSelect', (placeholder, dropdown_item) => {
+
+    cy.get('.ant-select-selection__placeholder').contains(placeholder).click()
+    cy.get('.ant-select-dropdown').not('have.class','.ant-select-dropdown-hidden').then($el=> {
+        cy.wrap($el).find('li.ant-select-dropdown-menu-item').contains(dropdown_item).click({force:true});
+    })
+
+})
