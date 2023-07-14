@@ -110,9 +110,9 @@ describe('Log-in', () => {
         cy.wait(50000)
         cy.get('button').contains('NEW ASSESSMENT').click()
         cy.get('.ant-spin-dot.ant-spin-dot-spin').should('not.exist')
-        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(0).type("Test");
-        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(1).type("Fet");
-        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(2).type("Fet");
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(0).type("First");
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(1).type("Middle");
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(2).type("Last");
         cy.get(new_assessmnt_dob_input).type('09091978')
         cy.get(new_assessmnt_gender_dropdown).click()
         cy.get(new_assessmnt_gender_input).type(`${gender}{enter}`)
@@ -134,7 +134,15 @@ describe('Log-in', () => {
         cy.get('[data-tag="loanAmount"]').find('input').type('30000')
         cy.get('[data-tag="ApplicantEmployer"]').find('input').type('Some Employer')
         cy.get('.formatic-action-bar-root__next-container').find('button').click()
-        cy.get('input[label="I have read and agree to the consent statement above]').click()
+        cy.get('input[label="I have read and agree to the consent statement above"]').check({force:true})
+        cy.get('.formatic-action-button > .formatic-button').click()
+        cy.get('.formatic-label__content').contains('Applicant SMS Sent')
+        cy.get('.page.page__edit').find('button').contains('Back').click()
+        // cy.get('.gridview .gridview__rows .gridview__row:nth-child(1) .gridview__column:nth-child(1)').should('not.contains','Not Set')
+        // cy.get('.gridview .gridview__rows .gridview__row:nth-child(1) .gridview__column:nth-child(1)').eq(0).should('not.have.text', 'Not Set');
+        cy.get('.gridview .gridview__rows .gridview__row:nth-child(1) .gridview__column:nth-child(7)').should('have.text', 'With Customer');
+        cy.get('.gridview .gridview__rows .gridview__row:nth-child(1) .gridview__column:nth-child(1)').should('not.have.text', 'Not Set');
+        
     })
 
 })
