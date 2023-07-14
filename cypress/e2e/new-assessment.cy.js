@@ -97,6 +97,8 @@ describe('Log-in', () => {
     })
 
 
+
+
     it.only('Manual address entry', () => {
         const gender = 'Male'
         const address = '2 AIDAN ST, DEERAGUN QLD 4818'
@@ -132,14 +134,7 @@ describe('Log-in', () => {
         cy.get('[data-tag="loanAmount"]').find('input').type('30000')
         cy.get('[data-tag="ApplicantEmployer"]').find('input').type('Some Employer')
         cy.get('.formatic-action-bar-root__next-container').find('button').click()
-        // cy.get().click()
-        /*cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(8).type("NSW");
-        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(9).type("50000");
-        cy.get(new_assessmnt_nextbutton).click()
-        cy.get(new_assessmnt_sendassessmnt_btn).click()
-        cy.get(new_assessmnt_errormsg).should('be.visible').contains("This field is required")
-        cy.wait(3000)*/
-
+        cy.get('input[label="I have read and agree to the consent statement above]').click()
     })
 
 })
