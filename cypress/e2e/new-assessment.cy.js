@@ -102,10 +102,10 @@ describe('Log-in', () => {
         const address = '2 AIDAN ST, DEERAGUN QLD 4818'
 
         cy.login(Cypress.env('user_main'), Cypress.env('user_main_password'))
-        cy.intercept('GET', '/v3/users/me').as('getUserWidget')
+        // cy.intercept('GET', '/v3/users/me').as('getUserWidget')
         cy.visit("/");
-        cy.wait('@getUserWidget')
-        // cy.wait(50000)
+        // cy.wait('@getUserWidget')
+        cy.wait(50000)
         cy.get('button').contains('NEW ASSESSMENT').click()
         cy.get('.ant-spin-dot.ant-spin-dot-spin').should('not.exist')
         cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(0).type("Test");
@@ -125,8 +125,13 @@ describe('Log-in', () => {
         cy.get('.ant-select-dropdown').not('have.class','.ant-select-dropdown-hidden').then($el=> {
             cy.wrap($el).find('li.ant-select-dropdown-menu-item').contains("Australia").click({force:true});
         })
-        // cy.get('[data-tag="loan"]').contains('Loan Amount')
-        
+        cy.get('.ant-select-selection__placeholder').contains('Please select a state').click()
+        cy.get('.ant-select-dropdown').not('have.class','.ant-select-dropdown-hidden').then($el=> {
+            cy.wrap($el).find('li.ant-select-dropdown-menu-item').contains("NSW").click({force:true});
+        })
+        cy.get('[data-tag="loanAmount"]').find('input').type('30000')
+        cy.get('[data-tag="ApplicantEmployer"]').find('input').type('Some Employer')
+        cy.get('.formatic-action-bar-root__next-container').find('button').click()
         // cy.get().click()
         /*cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(8).type("NSW");
         cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(9).type("50000");
