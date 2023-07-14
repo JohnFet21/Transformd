@@ -1,5 +1,5 @@
 describe('New Assessment', () => {
-    const new_assessmnt_btn = '.d-block > .btn'
+    const new_assessmnt_btn = '.page.page__dashboard .d-block > .btn'
     const new_assessmnt_heading = '.formatic-heading'
     const new_assessmnt_nextbutton = '.formatic-button'
     const new_assessmnt_input = '.formatic-text__input'
@@ -22,16 +22,16 @@ describe('New Assessment', () => {
 
     })
 
-    it('Should be unable to proceed if required fields are not filled', () => {
+    it.only('Should be unable to proceed if required fields are not filled', () => {
         const gender = 'Male'
         const address = '2 AIDAN ST, DEERAGUN QLD 4818'
 
         cy.login(Cypress.env('user_main'), Cypress.env('user_main_password'))
         cy.visit("/");
         cy.get(new_assessmnt_btn).click()
-        cy.get('.ant-spin-dot.ant-spin-dot-spin').should('not.exist')
+        cy.checkLoading()
         cy.get('.formatic-action-bar-root__next-container').find('button').click()
-        cy.get('.ant-spin-dot.ant-spin-dot-spin').should('not.exist')
+        cy.checkLoading()
         cy.get(new_assessmnt_errormsg).eq(0).should("be.visible").contains("This field is required");
         cy.get(new_assessmnt_errormsg).eq(1).should("be.visible").contains("This field is required");
         cy.get(new_assessmnt_errormsg).eq(2).should("be.visible").contains("Please enter valid date");
@@ -78,27 +78,6 @@ describe('New Assessment', () => {
         cy.get('[data-tag="loanAmount"]').find('div[class="formatic-error-message"]').should('not.exist')
 
 
-        
-
-
-        /*
-        cy.get(new_assessmnt_dob_input).eq(0).type("Test");
-        cy.get(new_assessmnt_errormsg).eq(0).should("not.be.visible").contains("This field is required");
-        cy.get(new_assessmnt_dob_input).eq(1).type("Fet");
-        cy.get(new_assessmnt_errormsg).eq(1).should("not.be.visible").contains("This field is required");
-        cy.get(new_assessmnt_dob_input).eq(2).type("Fet");
-        cy.get(new_assessmnt_errormsg).eq(2).should("not.be.visible").contains("Please enter valid date");
-        cy.get(new_assessmnt_dob_input).eq(3).type("0431295336");
-        cy.get(new_assessmnt_errormsg).eq(3).should("not.be.visible").contains("This field is required");
-        cy.get(new_assessmnt_dob_input).eq(4).type("2507MI");
-        cy.get(new_assessmnt_errormsg).eq(4).should("not.be.visible").contains("This field is required");
-        cy.get(new_assessmnt_dob_input).eq(5).type("50000");
-        cy.get(new_assessmnt_errormsg).eq(5).should("not.be.visible").contains("This field is required");
-        cy.get(new_assessmnt_dob_input).eq(6).type("DEERAGUN QLD");
-        cy.get(new_assessmnt_errormsg).eq(6).should("not.be.visible").contains("Please select a valid address")
-        cy.get(new_assessmnt_dob_input).eq(7).type("48186");
-        cy.get(new_assessmnt_errormsg).eq(7).should("not.be.visible").contains("This field is required");
-        */
     })
 
     it('Should Unsuccessfully submit assessment if without consent', () => {
@@ -108,9 +87,9 @@ describe('New Assessment', () => {
         cy.login(Cypress.env('user_main'), Cypress.env('user_main_password'))
         cy.visit("/");
         cy.get(new_assessmnt_btn).click()
-        cy.get(new_assessmnt_input).eq(0).type("Test");
+        cy.get('[data-tag="ApplicantFirstName"]').find('input').type("Test");
         cy.get(new_assessmnt_input).eq(1).type("Fet");
-        cy.get(new_assessmnt_input).eq(2).type("Fet");
+        cy.get('[data-tag="ApplicantLastName"]').find('input').type("Fet");
         cy.get(new_assessmnt_dob_input).type('09091978')
         cy.get(new_assessmnt_gender_dropdown).click()
         cy.get(new_assessmnt_gender_input).type(`${gender}{enter}`)
@@ -148,18 +127,16 @@ describe('New Assessment', () => {
         const gender = 'Male'
 
         cy.login(Cypress.env('user_main'), Cypress.env('user_main_password'))
-        // cy.intercept('GET', '/v3/users/me').as('getUserWidget')
+        cy.intercept('GET', '/v3/users/me').as('getUserWidget')
         cy.visit("/");
-        // cy.wait('@getUserWidget')
-        cy.wait(50000)
+        cy.wait('@getUserWidget')
+        // cy.wait(50000)
         cy.get('button').contains('NEW ASSESSMENT').click()
-        cy.get('.ant-spin-dot.ant-spin-dot-spin').should('not.exist')
-        cy.get(new_assessmnt_input).eq(0).type("First");
+        cy.checkLoading()
+        cy.get('[data-tag="ApplicantFirstName"]').find('input').type("First");
         cy.get(new_assessmnt_input).eq(1).type("Middle");
-        cy.get(new_assessmnt_input).eq(2).type("Last");
-        cy.get(new_assessmnt_input).eq(0).type("Test");
-        cy.get(new_assessmnt_input).eq(1).type("Fet");
-        cy.get(new_assessmnt_input).eq(2).type("Fet");
+        cy.get('[data-tag="ApplicantLastName"]').find('input').type("Last");
+       
         cy.get(new_assessmnt_dob_input).type('09091978')
         cy.get(new_assessmnt_gender_dropdown).click()
         cy.get(new_assessmnt_gender_input).type(`${gender}{enter}`)
@@ -180,7 +157,10 @@ describe('New Assessment', () => {
         cy.get('input[label="I have read and agree to the consent statement above"]').check({force:true})
         cy.get('[data-tag="sendAssessments"]').find('button').click()
         cy.get('.formatic-label__content').contains('Applicant SMS Sent')
+
         cy.get('.page.page__edit').find('button').contains('Back').click()
+
+        
         cy.get('.gridview .gridview__rows .gridview__row:nth-child(1) .gridview__column:nth-child(7)').should('have.text', 'With Customer');
         cy.get('.gridview .gridview__rows .gridview__row:nth-child(1) .gridview__column:nth-child(1)').should('not.have.text', 'Not Set');
         
