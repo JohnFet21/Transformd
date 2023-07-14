@@ -1,4 +1,4 @@
-describe('Log-in', () => {
+describe('New Assessment', () => {
     const new_assessmnt_btn = '.d-block > .btn'
     const new_assessmnt_heading = '.formatic-heading'
     const new_assessmnt_nextbutton = '.formatic-button'
@@ -29,6 +29,9 @@ describe('Log-in', () => {
     })
 
     it('Should be unable to proceed if required fields are not filled', () => {
+        const gender = 'Male'
+        const address = '2 AIDAN ST, DEERAGUN QLD 4818'
+
         cy.login(Cypress.env('user_main'), Cypress.env('user_main_password'))
         cy.visit("/");
         cy.get(new_assessmnt_btn).click()
@@ -43,6 +46,65 @@ describe('Log-in', () => {
         cy.get(new_assessmnt_errormsg).eq(5).should("be.visible").contains("This field is required");
         cy.get(new_assessmnt_errormsg).eq(6).should("be.visible").contains("Please select a valid address")
         cy.get(new_assessmnt_errormsg).eq(7).should("be.visible").contains("This field is required");
+
+
+        cy.get('[data-tag="ApplicantFirstName"]').eq(0).type("Test");
+        cy.get(new_assessmnt_nextbutton).click()
+        cy.get('[data-tag="ApplicantFirstName"]').find('div[class="formatic-error-message"]').should('not.exist')
+
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(2).type("Fet");
+        cy.get(new_assessmnt_nextbutton).click()
+        cy.get('[data-tag="ApplicantLastName"]').find('div[class="formatic-error-message"]').should('not.exist')
+
+        cy.get(new_assessmnt_dob_input).type('09091978')
+        cy.get(new_assessmnt_nextbutton).click()
+        cy.get('[data-tag="ApplicantDateOfBirth"]').find('div[class="formatic-error-message"]').should('not.exist')
+
+        cy.get(new_assessmnt_gender_dropdown).click()
+        cy.get(new_assessmnt_gender_input).type(`${gender}{enter}`)
+        cy.get(new_assessmnt_nextbutton).click()
+        cy.get('[data-tag="ApplicantGender"]').find('div[class="formatic-error-message"]').should('not.exist')
+
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(3).type("0431295336");
+        cy.get(new_assessmnt_nextbutton).click()
+        cy.get('[data-tag="ApplicantMobileNumber"]').find('div[class="formatic-error-message"]').should('not.exist')
+
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(4).type("2507MI");
+        cy.get(new_assessmnt_nextbutton).click()
+        cy.get('[data-tag="ApplicantDriversLicenceNumber"]').find('div[class="formatic-error-message"]').should('not.exist')
+
+        cy.get(new_assessmnt_currentaddress_input).type(address)
+        cy.get(new_assessmnt_currentaddress_list).click()
+        // cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(6).type("DEERAGUN QLD");
+        cy.get(new_assessmnt_nextbutton).click()
+        cy.get('[data-tag="ApplicantCurrentAddress"]').find('div[class="formatic-error-message"]').should('not.exist')
+
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(5).type("50000");
+        cy.get(new_assessmnt_nextbutton).click()
+        cy.get('[data-tag="loanAmount"]').find('div[class="formatic-error-message"]').should('not.exist')
+
+
+        
+
+
+        /*
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(0).type("Test");
+        cy.get(new_assessmnt_errormsg).eq(0).should("not.be.visible").contains("This field is required");
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(1).type("Fet");
+        cy.get(new_assessmnt_errormsg).eq(1).should("not.be.visible").contains("This field is required");
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(2).type("Fet");
+        cy.get(new_assessmnt_errormsg).eq(2).should("not.be.visible").contains("Please enter valid date");
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(3).type("0431295336");
+        cy.get(new_assessmnt_errormsg).eq(3).should("not.be.visible").contains("This field is required");
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(4).type("2507MI");
+        cy.get(new_assessmnt_errormsg).eq(4).should("not.be.visible").contains("This field is required");
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(5).type("50000");
+        cy.get(new_assessmnt_errormsg).eq(5).should("not.be.visible").contains("This field is required");
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(6).type("DEERAGUN QLD");
+        cy.get(new_assessmnt_errormsg).eq(6).should("not.be.visible").contains("Please select a valid address")
+        cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(7).type("48186");
+        cy.get(new_assessmnt_errormsg).eq(7).should("not.be.visible").contains("This field is required");
+        */
     })
 
     it('Should Unsuccessfully submit assessment if without consent', () => {
