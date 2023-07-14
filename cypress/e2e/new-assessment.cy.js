@@ -102,10 +102,10 @@ describe('Log-in', () => {
         const address = '2 AIDAN ST, DEERAGUN QLD 4818'
 
         cy.login(Cypress.env('user_main'), Cypress.env('user_main_password'))
-        // cy.intercept('GET', '/v3/users/me').as('getUserWidget')
+        cy.intercept('GET', '/v3/users/me').as('getUserWidget')
         cy.visit("/");
-        // cy.wait('@getUserWidget')
-        cy.wait(50000)
+        cy.wait('@getUserWidget')
+        // cy.wait(50000)
         cy.get('button').contains('NEW ASSESSMENT').click()
         cy.get('.ant-spin-dot.ant-spin-dot-spin').should('not.exist')
         cy.get(new_assessmnt_fn_mn_ln_mn_dln_la_e).eq(0).type("Test");
