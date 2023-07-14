@@ -12,7 +12,7 @@ describe('Log-in', () => {
   const email_user_error_msg = '.type--text > .help-block > span'
   const password_error_msg = '.type--password > .help-block > span'
   const resetpwpage_subtitle = '.page-sub-title'
-
+  const new_assessmnt_btn = '.d-block > .btn'
 
   it.only('Successful login_Valid Credentials', () => {
     
@@ -94,6 +94,10 @@ describe('Log-in', () => {
     cy.get(resetpwpage_subtitle).should('contain', 'Enter your e-mail below and we will send you reset instructions.')
 
   })
+
+
+
+
 
 
 })
